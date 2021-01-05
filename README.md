@@ -48,8 +48,7 @@ from this archetype locally and on a provided AWS Account.
 ## Quickstart
 Before using the archetype, make sure you double check all [pre-requisite technologies](#technology-stack) 
 are [installed and functional](#pre-requisites-check). The archetype should also have been downloaded 
-and installed locally as explained in the **Installation** section of this document. You will also 
-need your AWS credentials.
+and [installed locally](#installation). You will also need your AWS credentials.
 ```
 mvn archetype:generate \
   -DarchetypeGroupId=com.soundlab \
