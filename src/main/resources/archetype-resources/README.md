@@ -23,65 +23,57 @@
 ## Pre-requisites check
 The following procedures will ensure all pre-requisite technologies are installed and functional
 on your system. Run these commands from your system's terminal. Make sure they return results similar
-to the sample outputs and that they don't denote the absence of the dependency. Sample outputs are
-escaped by **>** (closing angled bracket) symbol. If any isn't present or properly configured, 
-please refer to the vendor's instructions or use the provided links. Also make sure you own an 
-AWS account with development permissions.
+to the sample outputs and that they don't denote the absence of the dependency. If any isn't present 
+or properly configured, please refer to the vendor's instructions or use the provided links. Also 
+make sure you own an AWS account with development permissions.
 
 #### [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 ```
 git --version
-
-> git version 2.17.1
 ```
+> git version 2.17.1
 
 #### [Java](https://www3.ntu.edu.sg/home/ehchua/programming/howto/JDK_Howto.html)
 ```
 java -version
-
-> java version "1.8.0_251"
-> Java(TM) SE Runtime Environment (build 1.8.0_251-b08)
-> Java HotSpot(TM) 64-Bit Server VM (build 25.251-b08, mixed mode)
 ```
+> java version "1.8.0_251"\
+> Java(TM) SE Runtime Environment (build 1.8.0_251-b08)\
+> Java HotSpot(TM) 64-Bit Server VM (build 25.251-b08, mixed mode)
 
 #### [Maven](https://mkyong.com/maven/how-to-install-maven-in-windows/)
 ```
 mvn -v
-
-> Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
-> Maven home: /Applications/apache-maven-3.6.3
 ```
+> Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)\
+> Maven home: /Applications/apache-maven-3.6.3
 
 #### [NodeJS](https://nodejs.org/en/download/)
 ```
 node -v
-
-> v12.13.0
 ```
+> v12.13.0
 
 #### [Node Package Manager (NPM)](https://nodejs.org/en/download/)
 ```
 npm -v
-
-> 6.12.0
 ```
+> 6.12.0
 
 #### [Serverless Framework](https://www.serverless.com/framework/docs/providers/aws/guide/installation/)
 ```
 serverless -v
-
-> Framework Core: 1.77.1
-> Plugin: 3.6.18
-> SDK: 2.3.1
-> Components: 2.33.0
 ```
+> Framework Core: 1.77.1\
+> Plugin: 3.6.18\
+> SDK: 2.3.1\
+> Components: 2.33.0
 
 #### [Docker](https://docs.docker.com/get-docker/)
 ```
 docker -v
-
-> Docker version 19.03.5, build 633a0ea
 ```
+> Docker version 19.03.5, build 633a0ea
 
 ## Installation
 Make sure you install and confirm the installation of the pre-required technologies if not already
