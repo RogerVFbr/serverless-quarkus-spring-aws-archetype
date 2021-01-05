@@ -20,7 +20,7 @@ String packagePath = request.properties.get("package").replace(".", "/")
 if (!"${secure}".toBoolean()) {
     Files.deleteIfExists projectPath.resolve("").resolve("serverless-cognito.yml")
     Files.deleteIfExists projectPath.resolve("src/test/java/" + packagePath + "/integration").resolve("IntegrationTestsConfigResolver-cognito.java")
-    Files.deleteIfExists projectPath.resolve("src/test/java/" + packagePath + "/integration").resolve("IntegrationTestsConfigResolver.java")
+    Files.deleteIfExists projectPath.resolve("src/test/java/" + packagePath + "/integration").resolve("PingIntegrationTests-cognito.java")
     Files.deleteIfExists projectPath.resolve("serverless").resolve("serverless-resources-cognito.yml")
     Files.deleteIfExists projectPath.resolve("serverless")
 } else {
