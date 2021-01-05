@@ -86,9 +86,9 @@ The archetype will perform the following actions:
 ## Pre-requisites check
 The following procedures will ensure all pre-requisite technologies are installed and functional
 on your system. Run these commands from your system's terminal. Make sure they return results similar 
-to the sample outputs and that they don't denote the absence of the dependency. Sample outputs are
-escaped by **>** symbol. If any isn't present or properly configured, please refer to the vendor's
-instructions or use the provided links. Also make sure you own an AWS account with development permissions.
+to the sample outputs and that they don't denote the absence of the dependency If any isn't present 
+or properly configured, please refer to the vendor's instructions or use the provided links. Also 
+make sure you own an AWS account with development permissions.
 
 #### [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 ```
