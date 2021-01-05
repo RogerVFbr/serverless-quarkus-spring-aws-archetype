@@ -3,7 +3,7 @@ service: ${awsStackName}
 
 provider:
   name: aws
-  stage: dev
+  stage: ${dollarSign}{opt:stage, 'branch'}
   region: us-east-1
   versionFunctions: false
   memorySize: 512
