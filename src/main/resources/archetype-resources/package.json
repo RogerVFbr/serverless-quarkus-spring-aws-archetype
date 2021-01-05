@@ -1,0 +1,21 @@
+{
+  "name": "${artifactId}",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "set-service-credentials": "sls config credentials --provider aws --profile ${awsStackName}-profile --overwrite",
+    "start-local": "mvn compile quarkus:dev -Daws.profile=${awsStackName}-profile",
+    "deploy": "mvn clean install -Dquarkus.http.root-path=/jvm -Dquarkus.package.uber-jar=true -Dmaven.test.skip=true && mvn clean install -Dquarkus.http.root-path=/native -Dnative -Dnative-image.docker-build=true -DbuildDirectory=target-native -Dmaven.test.skip=true && sls deploy --aws-profile ${awsStackName}-profile && serverless export-env --aws-profile ${awsStackName}-profile",
+    "remove": "sls remove --aws-profile ${awsStackName}-profile",
+    "test": "mvn test -Dtest=!${package}.integration.**",
+    "test-integration-local": "mvn test -Dtest=${package}.integration.**",
+    "test-integration-cloud": "mvn -fn test -Dintegration.test.profile=jvm -Dtest=${package}.integration.** && mvn surefire:test -Dintegration.test.profile=native -Dtest=${package}.integration.**"
+  },
+  "author": "Roger Freret",
+  "license": "ISC",
+  "dependencies": {
+    "serverless-export-env": "github:arabold/serverless-export-env",
+    "serverless-stack-output": "^0.2.3"
+  }
+}

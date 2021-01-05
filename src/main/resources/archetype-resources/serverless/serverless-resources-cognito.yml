@@ -1,0 +1,156 @@
+#set ( $dollarSign = "$")
+Resources:
+
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    Properties:
+      MfaConfiguration: OFF
+      UserPoolName: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-user-pool
+      UserPoolTags:
+        Application: ${dollarSign}{self:service}
+
+  UserPoolResourceServer:
+    Type: AWS::Cognito::UserPoolResourceServer
+    DeletionPolicy: Retain
+    Properties:
+      Identifier: https://${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.resource-server.com
+      Name: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage} Resource Server
+      Scopes:
+        - ScopeName: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.test
+          ScopeDescription: Automated test scope.
+        - ScopeName: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.read
+          ScopeDescription: Read only.
+        - ScopeName: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.write
+          ScopeDescription: Write only.
+      UserPoolId:
+        Ref: UserPool
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    DeletionPolicy: Retain
+    Properties:
+      Domain: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}
+      UserPoolId:
+        Ref: UserPool
+
+  UserPoolTestClient:
+    Type: AWS::Cognito::UserPoolClient
+    DeletionPolicy: Retain
+    Properties:
+      ClientName: TestClient
+      GenerateSecret: True
+      AllowedOAuthFlows:
+        - client_credentials
+      AllowedOAuthScopes:
+        - Fn::Join: [ "/", [ !Ref UserPoolResourceServer,  "${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.test"] ]
+      UserPoolId:
+        Ref: UserPool
+      AllowedOAuthFlowsUserPoolClient: true
+
+  ApiGatewayAuthorizer:
+    DependsOn:
+      - ApiGatewayRestApi
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      Name: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-authorizer
+      IdentitySource: method.request.header.Authorization
+      RestApiId:
+        Ref: ApiGatewayRestApi
+      Type: COGNITO_USER_POOLS
+      ProviderARNs:
+        - Fn::GetAtt: [UserPool, Arn]
+
+  FetchTestClientSecretCustomResource:
+    Type: "Custom::FetchTestClientSecretCustomResource"
+    Properties:
+      ServiceToken:
+        Fn::GetAtt: [FetchTestClientSecretLambda, Arn]
+      clientId:
+        Ref: UserPoolTestClient
+      userpoolId:
+        Ref: UserPool
+
+  FetchTestClientSecretLambda:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: !Join
+          - |+
+          - - 'const response = require(''cfn-response'');'
+            - 'const aws = require(''aws-sdk'');'
+            - 'const identity = new aws.CognitoIdentityServiceProvider();'
+            - 'exports.handler = (event, context, callback) => {'
+            - ' console.log(event);'
+            - ' if (event.RequestType == ''Delete'') { '
+            - '   response.send(event, context, response.SUCCESS, {})'
+            - ' }'
+            - ' if (event.RequestType == ''Update'' || event.RequestType == ''Create'') {'
+            - '   const params = {'
+            - '     ClientId: event.ResourceProperties.clientId,'
+            - '     UserPoolId: event.ResourceProperties.userpoolId'
+            - '   };'
+            - '   identity.describeUserPoolClient(params).promise()'
+            - '     .then((res) => {'
+            - '       console.log(res);'
+            - '       response.send(event, context, response.SUCCESS, {''appSecret'': res.UserPoolClient.ClientSecret});'
+            - '     })'
+            - '     .catch((err) => {'
+            - '       response.send(event, context, response.FAILED, {err});'
+            - '     });'
+            - ' }'
+            - '};'
+      Handler: index.handler
+      Runtime: nodejs10.x
+      Timeout: 300
+      Role:
+        Fn::GetAtt: [FetchTestClientSecretRole, Arn]
+    DependsOn: FetchTestClientSecretRole
+
+  FetchTestClientSecretRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-fetch-test-client-secret-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: FetchTestClientSecretPolicy
+          PolicyDocument: !Sub |
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": "cognito-idp:DescribeUserPoolClient",
+                        "Resource": "*"
+                    }
+                ]
+            }
+
+Outputs:
+  TestClientId:
+    Value:
+      Ref: UserPoolTestClient
+    Export:
+      Name: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-test-client-id
+  TestClientSecret:
+    Value:
+      Fn::GetAtt: [FetchTestClientSecretCustomResource, appSecret]
+    Export:
+      Name: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-test-client-secret
+  CognitoUrl:
+    Value: "https://${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.auth.${dollarSign}{self:provider.region}.amazoncognito.com/oauth2/token"
+    Export:
+      Name: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-cognito-url
+  TestScope:
+    Value:
+      Fn::Join: [ "/", [ !Ref UserPoolResourceServer,  "${dollarSign}{self:service}-${dollarSign}{self:provider.stage}.test"] ]
+    Export:
+      Name: ${dollarSign}{self:service}-${dollarSign}{self:provider.stage}-test-scope
