@@ -7,7 +7,6 @@ dir = new File(new File(request.outputDirectory), request.artifactId)
 systemNpmExtension = System.properties['os.name'].toLowerCase().contains('windows') ? '.cmd' : ''
 
 def run(String cmd) {
-    println(systemNpmExtension)
     def process = cmd.execute(null, dir)
     process.waitForProcessOutput((Appendable)System.out, System.err)
     if (process.exitValue() != 0) {

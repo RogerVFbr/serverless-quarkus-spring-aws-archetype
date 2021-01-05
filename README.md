@@ -59,6 +59,9 @@ mvn archetype:generate \
   -DawsAccessKeyId=<AWS_ACCESS_KEY_ID_FOR_THIS_PROJECT> \
   -DawsSecretAccessKey=<AWS_SECRET_ACCESS_KEY_FOR_THIS_PROJECT>
 ```
+> **Note:** On Windows terminals, replace the backslash symbol `\ ` for the `^` symbol for multiline 
+> commands.
+
 The archetype will perform the following actions:
 1. Generate a Maven project will all required dependencies and build procedures.
 2. Generate a Quarkus/Spring application boilerplate code with a default *ping* endpoint. By default,
@@ -182,6 +185,8 @@ Execute from the command terminal:
    a new project. Replace the content within the angled brackets (including the brackets themselves) 
    by the proper information and the acquired AWS credentials. Run the command from your default projects 
    folder.
+   > **Note:** On Windows terminals, replace the backslash symbol `\ ` for the `^` symbol for multiline
+   > commands.
    #### Basic Project
     ```
     mvn archetype:generate \
