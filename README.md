@@ -46,9 +46,10 @@ The following instructions should allow the developer to build, execute and depl
 from this archetype locally and on a provided AWS Account.
 
 ## Quickstart
-Before using the archetype, make sure you double check all pre-requisite technologies are installed
-and functional. The archetype should also have been downloaded and installed locally as explained
-in the **Installation** section of this document. You will also need your AWS credentials.
+Before using the archetype, make sure you double check all [pre-requisite technologies](#technology-stack) 
+are [installed and functional](#pre-requisites-check). The archetype should also have been downloaded 
+and installed locally as explained in the **Installation** section of this document. You will also 
+need your AWS credentials.
 ```
 mvn archetype:generate \
   -DarchetypeGroupId=com.soundlab \
@@ -86,9 +87,9 @@ The archetype will perform the following actions:
 ## Pre-requisites check
 The following procedures will ensure all pre-requisite technologies are installed and functional
 on your system. Run these commands from your system's terminal. Make sure they return results similar 
-to the sample outputs and that they don't denote the absence of the dependency If any isn't present 
-or properly configured, please refer to the vendor's instructions or use the provided links. Also 
-make sure you own an AWS account with development permissions.
+to the sample outputs confirming the dependency is present. If any isn't present or properly configured, 
+please refer to the vendor's instructions or use the provided links. Also make sure you own an AWS 
+account with development permissions.
 
 #### [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 ```
