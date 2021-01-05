@@ -4,8 +4,10 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption;
 
 dir = new File(new File(request.outputDirectory), request.artifactId)
+systemNpmExtension = System.properties['os.name'].toLowerCase().contains('windows') ? '.cmd' : ''
 
 def run(String cmd) {
+    println(systemNpmExtension)
     def process = cmd.execute(null, dir)
     process.waitForProcessOutput((Appendable)System.out, System.err)
     if (process.exitValue() != 0) {
@@ -36,12 +38,12 @@ if (!"${secure}".toBoolean()) {
             StandardCopyOption.REPLACE_EXISTING)
 }
 
-run("npm i")
-run("npm run set-service-credentials -- --key ${awsAccessKeyId} --secret ${awsSecretAccessKey}")
+run("npm${systemNpmExtension} i")
+run("npm${systemNpmExtension} run set-service-credentials -- --key ${awsAccessKeyId} --secret ${awsSecretAccessKey}")
 
 if ("${deploy}".toBoolean()) {
-    run("npm run deploy")
-    run("npm run test-integration-cloud")
+    run("npm${systemNpmExtension} run deploy")
+    run("npm${systemNpmExtension} run test-integration-cloud")
 }
 
 run("git init")
